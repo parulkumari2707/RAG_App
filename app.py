@@ -8,8 +8,7 @@ Original file is located at
 """
 
 import streamlit as st
-from langchain.document_loaders import PyPDFLoader, TextLoader
-from langchain.document_loaders.word_document import Docx2txtLoader
+from langchain_community.document_loaders import PyPDFLoader, TextLoader, Docx2txtLoader
 from langchain.vectorstores import FAISS
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.llms import OpenAI
@@ -43,8 +42,7 @@ if uploaded_files:
         elif file_extension == "txt":
             loader = TextLoader(uploaded_file)
         elif file_extension == "docx":
-            loader = Docx2txtLoader(uploaded_file)  # Updated loader
-
+            loader = Docx2txtLoader(uploaded_file)  # Updated import
         else:
             st.error("Unsupported file format!")
             continue
