@@ -15,11 +15,6 @@ from langchain.llms import OpenAI
 from langchain.chains import RetrievalQA
 import os
 
-# Set up OpenAI API key (use your own key)
-
-# Load API key securely
-import streamlit as st
-import os
 
 # Load API key securely
 openai_api_key = st.secrets["OPENAI_API_KEY"]
@@ -31,18 +26,23 @@ st.title("📄 Chat with Your Documents (RAG)")
 # File uploader
 uploaded_files = st.file_uploader("Upload Documents (PDF, TXT, DOCX)", type=["pdf", "txt", "docx"], accept_multiple_files=True)
 
-# Process uploaded files
 doc_texts = []
 if uploaded_files:
     for uploaded_file in uploaded_files:
         file_extension = uploaded_file.name.split(".")[-1]
 
+        # Save uploaded file to a temporary location
+        with tempfile.NamedTemporaryFile(delete=False, suffix=f".{file_extension}") as temp_file:
+            temp_file.write(uploaded_file.read())
+            temp_file_path = temp_file.name
+
+        # Load document based on type
         if file_extension == "pdf":
-            loader = PyPDFLoader(uploaded_file)
+            loader = PyPDFLoader(temp_file_path)
         elif file_extension == "txt":
-            loader = TextLoader(uploaded_file)
+            loader = TextLoader(temp_file_path)
         elif file_extension == "docx":
-            loader = Docx2txtLoader(uploaded_file)  # Updated import
+            loader = Docx2txtLoader(temp_file_path)
         else:
             st.error("Unsupported file format!")
             continue
@@ -57,10 +57,10 @@ if uploaded_files:
     vectorstore = FAISS.from_documents(doc_texts, embeddings)
     retriever = vectorstore.as_retriever()
 
-    # Set up QA chain
+    # Set up RAG QA chain
     qa_chain = RetrievalQA.from_chain_type(llm=OpenAI(), retriever=retriever)
 
-    # Chat interface
+    # Chat Interface
     user_query = st.text_input("Ask a question about the document:")
     if user_query:
         response = qa_chain.run(user_query)
