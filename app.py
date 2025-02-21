@@ -10,7 +10,7 @@ Original file is located at
 import streamlit as st
 from langchain_community.document_loaders import PyPDFLoader, TextLoader, Docx2txtLoader
 from langchain.vectorstores import FAISS
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_community.llms import HuggingFaceHub
 from langchain.llms import OpenAI
 from langchain.chains import RetrievalQA
 import os
@@ -59,7 +59,9 @@ if uploaded_files:
     retriever = vectorstore.as_retriever()
 
     # Set up RAG QA chain
-    qa_chain = RetrievalQA.from_chain_type(llm=OpenAI(), retriever=retriever)
+    # Use a free LLM from Hugging Face (e.g., Mistral 7B)
+    Llm = HuggingFaceHub(repo_id="mistralai/Mistral-7B-Instruct", model_kwargs={"temperature": 0.7})
+    qa_chain = RetrievalQA.from_chain_type(llm=Llm, retriever=retriever)
 
     # Chat Interface
     user_query = st.text_input("Ask a question about the document:")
