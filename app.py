@@ -14,6 +14,7 @@ from langchain.embeddings import OpenAIEmbeddings
 from langchain.llms import OpenAI
 from langchain.chains import RetrievalQA
 import os
+import tempfile  # Missing import for handling temporary files
 
 
 # Load API key securely
