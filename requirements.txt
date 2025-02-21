@@ -10,3 +10,6 @@ tiktoken
 sentence-transformers
 huggingface_hub
 transformers
+torch
+torchvision
+torchaudio
