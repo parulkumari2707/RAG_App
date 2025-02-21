@@ -16,7 +16,14 @@ from langchain.chains import RetrievalQA
 import os
 
 # Set up OpenAI API key (use your own key)
-os.environ["OPENAI_API_KEY"] = "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"
+
+# Load API key securely
+import streamlit as st
+import os
+
+# Load API key securely
+openai_api_key = st.secrets["OPENAI_API_KEY"]
+os.environ["OPENAI_API_KEY"] = openai_api_key
 
 # Streamlit UI
 st.title("📄 Chat with Your Documents (RAG)")
