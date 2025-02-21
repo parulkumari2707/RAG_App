@@ -22,9 +22,8 @@ try:
 except RuntimeError:
     asyncio.run(asyncio.sleep(0))
 
-# Load API key securely
-openai_api_key = st.secrets["OPENAI_API_KEY"]
-os.environ["OPENAI_API_KEY"] = openai_api_key
+# Load Hugging Face API key securely
+huggingface_api_key = st.secrets["HUGGINGFACEHUB_API_TOKEN"]
 
 # Streamlit UI
 st.title("📄 Chat with Your Documents (RAG)")
@@ -65,12 +64,18 @@ if uploaded_files:
 
     # Set up RAG QA chain
     # Use a free LLM from Hugging Face (e.g., Mistral 7B)
-    llm = HuggingFaceHub(repo_id="mistralai/Mistral-7B-Instruct", model_kwargs={"temperature": 0.7})
+    llm = HuggingFaceHub(repo_id="mistralai/Mistral-7B-Instruct", model_kwargs={"temperature": 0.7}, huggingfacehub_api_token=huggingface_api_key)
     qa_chain = RetrievalQA.from_chain_type(llm=llm, retriever=retriever)
 
     # Chat Interface
     user_query = st.text_input("Ask a question about the document:")
     if user_query:
+        response = qa_chain.run(user_query)
+        st.write("**Response:**", response)
+
+st.markdown("---")
+st.info("Powered by Hugging Face & LangChain")
+
         response = qa_chain.run(user_query)
         st.write("**Response:**", response)
 
