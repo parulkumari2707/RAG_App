@@ -10,7 +10,8 @@ Original file is located at
 import streamlit as st
 from langchain_community.document_loaders import PyPDFLoader, TextLoader, Docx2txtLoader
 from langchain.vectorstores import FAISS
-from langchain_community.llms import HuggingFaceHub
+#from langchain_community.llms import HuggingFaceHub
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain.llms import OpenAI
 from langchain.chains import RetrievalQA
 import os
