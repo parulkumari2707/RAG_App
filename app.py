@@ -10,7 +10,7 @@ Original file is located at
 import streamlit as st
 from langchain_community.document_loaders import PyPDFLoader, TextLoader, Docx2txtLoader
 from langchain.vectorstores import FAISS
-from langchain.embeddings import OpenAIEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain.llms import OpenAI
 from langchain.chains import RetrievalQA
 import os
@@ -54,7 +54,7 @@ if uploaded_files:
     st.success("Documents loaded successfully!")
 
     # Convert to embeddings & create FAISS index
-    embeddings = OpenAIEmbeddings()
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
     vectorstore = FAISS.from_documents(doc_texts, embeddings)
     retriever = vectorstore.as_retriever()
 
