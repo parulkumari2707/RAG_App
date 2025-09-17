@@ -76,8 +76,8 @@ if uploaded_files:
 st.markdown("---")
 st.info("Powered by Hugging Face & LangChain")
 
-        response = qa_chain.run(user_query)
-        st.write("**Response:**", response)
+response = qa_chain.run(user_query)
+st.write("**Response:**", response)
 
 st.markdown("---")
 st.info("Powered by Hugging Face & LangChain")
